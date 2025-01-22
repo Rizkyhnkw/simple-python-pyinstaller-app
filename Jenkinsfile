@@ -5,17 +5,34 @@ pipeline {
             args '-p 3000:3000'    
         }
     }
-    stages {
-        stage('Setup') { 
+        stage('Test') {
+            agent {
+                docker {
+                    image 'qnib/pytest'
+                }
+            }
             steps {
-                sh 'python -m venv venv' 
-                sh '. venv/bin/activate && pip install --upgrade pip setuptools' 
-                sh '. venv/bin/activate && pip install -r requirements.txt' 
+                sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+            }
+            post {
+                always {
+                    junit 'test-reports/results.xml'
+                }
             }
         }
-        stage('Test') { 
+        stage('Deliver') {
+            agent {
+                docker {
+                    image 'cdrx/pyinstaller-linux:python2'
+                }
+            }
             steps {
-                sh '. venv/bin/activate && pytest tests/' 
+                sh 'pyinstaller --onefile sources/add2vals.py'
+            }
+            post {
+                success {
+                    archiveArtifacts 'dist/add2vals'
+                }
             }
         }
     }
