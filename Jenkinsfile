@@ -17,7 +17,7 @@ node {
             input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
         }
       stage('Deploy') {
-            sh 'python sources/add2vals.py'
+            sh 'python sources/add2vals.py 7 7'
             sh 'sleep 60'
         }
 }
