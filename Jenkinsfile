@@ -17,8 +17,7 @@ node {
             input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
         }
       stage('Deploy') {
-            sh './jenkins/scripts/deliver.sh'
+            sh 'python sources/add2vals.py'
             sh 'sleep 60'
-            sh './jenkins/scripts/kill.sh'
         }
 }
