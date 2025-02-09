@@ -7,7 +7,7 @@ node {
 
     stage('Test') {
         docker.image('python:3-alpine').inside {
-            sh 'pip install --no-cache-dir pytest'  // Install pytest
+            sh 'python3 -m venv venv && source venv/bin/activate && pip install --no-cache-dir pytest'
             sh 'pytest --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
         }
 
