@@ -13,4 +13,12 @@ node {
         // Post actions
         junit 'test-reports/results.xml'
     }
+     stage('Manual Approval') {
+            input message: 'Lanjutkan ke tahap Deploy?', ok: 'Proceed'
+        }
+      stage('Deploy') {
+            sh './jenkins/scripts/deliver.sh'
+            sh 'sleep 60'
+            sh './jenkins/scripts/kill.sh'
+        }
 }
